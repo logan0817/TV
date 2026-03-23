@@ -2,6 +2,7 @@ package com.fongmi.android.tv.ui.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -92,6 +93,7 @@ public class VodFragment extends BaseFragment implements ConfigCallback, SiteCal
     protected void initView() {
         EventBus.getDefault().register(this);
         mBinding.title.setSelected(true);
+        mBinding.title.setPaintFlags(mBinding.title.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         setRecyclerView();
         setViewModel();
         showProgress();
