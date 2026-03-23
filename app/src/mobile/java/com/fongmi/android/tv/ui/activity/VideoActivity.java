@@ -149,7 +149,8 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
     private PiP mPiP;
 
     public static void push(FragmentActivity activity, String text) {
-        if (FileChooser.isValid(activity, Uri.parse(text))) file(activity, FileChooser.getPathFromUri(Uri.parse(text)));
+        if (FileChooser.isValid(activity, Uri.parse(text)))
+            file(activity, FileChooser.getPathFromUri(Uri.parse(text)));
         else start(activity, Sniffer.getUrl(text));
     }
 
@@ -319,6 +320,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
         mBinding.control.play.setOnClickListener(view -> checkPlay());
         mBinding.control.next.setOnClickListener(view -> checkNext());
         mBinding.control.prev.setOnClickListener(view -> checkPrev());
+        mBinding.control.isSwitchOrientation.setOnClickListener(view -> switchOrientation());
         mBinding.control.setting.setOnClickListener(view -> onSetting());
         mBinding.control.title.setOnLongClickListener(view -> onChange());
         mBinding.control.right.lock.setOnClickListener(view -> onLock());
@@ -345,6 +347,16 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
         mBinding.video.setOnTouchListener((view, event) -> mKeyDown.onTouchEvent(event));
         mBinding.control.action.getRoot().setOnTouchListener(this::onActionTouch);
         mBinding.swipeLayout.setOnRefreshListener(this::onSwipeRefresh);
+    }
+
+    private void switchOrientation() {
+        if (isFullscreen()) {
+            exitFullscreen();
+            mBinding.control.isSwitchOrientation.setImageResource(R.drawable.ic_view_landscape_mode0);
+        } else {
+            enterFullscreen();
+            mBinding.control.isSwitchOrientation.setImageResource(R.drawable.ic_view_landscape_mode1);
+        }
     }
 
     private WindowInsetsCompat setStatusBar(WindowInsetsCompat insets) {
@@ -424,7 +436,8 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
     }
 
     private void checkId() {
-        if (getId().startsWith("push://")) getIntent().putExtra("key", "push_agent").putExtra("id", getId().substring(7));
+        if (getId().startsWith("push://"))
+            getIntent().putExtra("key", "push_agent").putExtra("id", getId().substring(7));
         if (getId().isEmpty() || getId().startsWith("msearch:")) setEmpty(false);
         else getDetail();
     }
@@ -539,9 +552,12 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
 
     private void setOther(TextView view, Vod item) {
         StringBuilder sb = new StringBuilder();
-        if (!item.getYear().isEmpty()) sb.append(getString(R.string.detail_year, item.getYear())).append("  ");
-        if (!item.getArea().isEmpty()) sb.append(getString(R.string.detail_area, item.getArea())).append("  ");
-        if (!item.getTypeName().isEmpty()) sb.append(getString(R.string.detail_type, item.getTypeName())).append("  ");
+        if (!item.getYear().isEmpty())
+            sb.append(getString(R.string.detail_year, item.getYear())).append("  ");
+        if (!item.getArea().isEmpty())
+            sb.append(getString(R.string.detail_area, item.getArea())).append("  ");
+        if (!item.getTypeName().isEmpty())
+            sb.append(getString(R.string.detail_type, item.getTypeName())).append("  ");
         view.setVisibility(sb.length() == 0 ? View.GONE : View.VISIBLE);
         view.setText(Util.substring(sb.toString(), 2));
     }
@@ -562,7 +578,8 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
         if (result.hasPosition()) mHistory.setPosition(result.getPosition());
         if (result.hasDesc()) setText(mBinding.content, 0, result.getDesc());
         setUseParse(VodConfig.hasParse() && ((result.getPlayUrl().isEmpty() && VodConfig.get().getFlags().contains(result.getFlag())) || result.getJx() == 1));
-        if (mControlDialog != null && mControlDialog.isVisible()) mControlDialog.setParseVisible(isUseParse());
+        if (mControlDialog != null && mControlDialog.isVisible())
+            mControlDialog.setParseVisible(isUseParse());
         mBinding.control.parse.setVisibility(isFullscreen() && isUseParse() ? View.VISIBLE : View.GONE);
         mPlayers.start(result, isUseParse(), getSite().isChangeable() ? getSite().getTimeout() : -1);
         setQualityVisible(result.getUrl().isMulti());
@@ -994,7 +1011,9 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
     }
 
     private void hideSheet() {
-        for (Fragment fragment : getSupportFragmentManager().getFragments()) if (fragment instanceof BottomSheetDialogFragment) ((BottomSheetDialogFragment) fragment).dismiss();
+        for (Fragment fragment : getSupportFragmentManager().getFragments())
+            if (fragment instanceof BottomSheetDialogFragment)
+                ((BottomSheetDialogFragment) fragment).dismiss();
     }
 
     private void setTraffic() {
@@ -1003,8 +1022,10 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
     }
 
     private void setOrient() {
-        if (isPort() && isAutoRotate()) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
-        if (isLand() && isAutoRotate()) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE);
+        if (isPort() && isAutoRotate())
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
+        if (isLand() && isAutoRotate())
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE);
     }
 
     private void setR1Callback() {
@@ -1198,8 +1219,10 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
         if (event.getType() == RefreshEvent.Type.DETAIL) getDetail();
         else if (event.getType() == RefreshEvent.Type.PLAYER) onRefresh();
         else if (event.getType() == RefreshEvent.Type.VOD) updateVod(event.getVod());
-        else if (event.getType() == RefreshEvent.Type.SUBTITLE) mPlayers.setSub(Sub.from(event.getPath()));
-        else if (event.getType() == RefreshEvent.Type.DANMAKU) mPlayers.setDanmaku(Danmaku.from(event.getPath()));
+        else if (event.getType() == RefreshEvent.Type.SUBTITLE)
+            mPlayers.setSub(Sub.from(event.getPath()));
+        else if (event.getType() == RefreshEvent.Type.DANMAKU)
+            mPlayers.setDanmaku(Danmaku.from(event.getPath()));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1237,7 +1260,8 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
     }
 
     private void setPosition() {
-        if (mHistory != null) mPlayers.seekTo(Math.max(mHistory.getOpening(), mHistory.getPosition()));
+        if (mHistory != null)
+            mPlayers.seekTo(Math.max(mHistory.getOpening(), mHistory.getPosition()));
     }
 
     private void checkOrientation() {
@@ -1521,8 +1545,10 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
     public void onBright(int progress) {
         mBinding.widget.bright.setVisibility(View.VISIBLE);
         mBinding.widget.brightProgress.setProgress(progress);
-        if (progress < 35) mBinding.widget.brightIcon.setImageResource(R.drawable.ic_widget_bright_low);
-        else if (progress < 70) mBinding.widget.brightIcon.setImageResource(R.drawable.ic_widget_bright_medium);
+        if (progress < 35)
+            mBinding.widget.brightIcon.setImageResource(R.drawable.ic_widget_bright_low);
+        else if (progress < 70)
+            mBinding.widget.brightIcon.setImageResource(R.drawable.ic_widget_bright_medium);
         else mBinding.widget.brightIcon.setImageResource(R.drawable.ic_widget_bright_high);
     }
 
@@ -1530,8 +1556,10 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
     public void onVolume(int progress) {
         mBinding.widget.volume.setVisibility(View.VISIBLE);
         mBinding.widget.volumeProgress.setProgress(progress);
-        if (progress < 35) mBinding.widget.volumeIcon.setImageResource(R.drawable.ic_widget_volume_low);
-        else if (progress < 70) mBinding.widget.volumeIcon.setImageResource(R.drawable.ic_widget_volume_medium);
+        if (progress < 35)
+            mBinding.widget.volumeIcon.setImageResource(R.drawable.ic_widget_volume_low);
+        else if (progress < 70)
+            mBinding.widget.volumeIcon.setImageResource(R.drawable.ic_widget_volume_medium);
         else mBinding.widget.volumeIcon.setImageResource(R.drawable.ic_widget_volume_high);
     }
 
@@ -1571,9 +1599,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
     @Override
     public void onDoubleTap() {
         if (isLock()) return;
-        if (!isFullscreen()) {
-            enterFullscreen();
-        } else if (mPlayers.isPlaying()) {
+        if (mPlayers.isPlaying()) {
             showControl();
             onPaused();
         } else {
@@ -1607,7 +1633,8 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
         super.onUserLeaveHint();
         if (isRedirect()) return;
         if (isLock()) App.post(this::onLock, 500);
-        if (mPlayers.haveTrack(C.TRACK_TYPE_VIDEO)) mPiP.enter(this, mPlayers.getVideoWidth(), mPlayers.getVideoHeight(), getScale());
+        if (mPlayers.haveTrack(C.TRACK_TYPE_VIDEO))
+            mPiP.enter(this, mPlayers.getVideoWidth(), mPlayers.getVideoHeight(), getScale());
     }
 
     @Override
@@ -1627,8 +1654,10 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (isAutoRotate() && isPort() && newConfig.orientation == Configuration.ORIENTATION_PORTRAIT && !isRotate() && !isLock()) exitFullscreen();
-        if (isAutoRotate() && isPort() && newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) enterFullscreen();
+        if (isAutoRotate() && isPort() && newConfig.orientation == Configuration.ORIENTATION_PORTRAIT && !isRotate() && !isLock())
+            exitFullscreen();
+        if (isAutoRotate() && isPort() && newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+            enterFullscreen();
         if (isFullscreen()) Util.hideSystemUI(this);
     }
 

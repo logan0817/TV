@@ -170,12 +170,27 @@
             tools:itemCount="5"
             tools:listitem="@layout/adapter_parse_dark" />
 
-        <com.fongmi.android.tv.ui.custom.CustomSeekView
-            android:id="@+id/seek"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp" />
+            android:gravity="center">
+
+            <com.fongmi.android.tv.ui.custom.CustomSeekView
+                android:id="@+id/seek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/isSwitchOrientation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="8dp"
+                app:srcCompat="@drawable/ic_view_landscape_mode0" />
+        </LinearLayout>
 
         <include
             android:id="@+id/action"
